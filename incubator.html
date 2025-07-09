@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交互式创业加速器申请指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!--
+        Chosen Palette: Warm Neutrals
+        Application Structure Plan: The SPA is designed as a founder's actionable toolkit, moving from self-discovery to action. The structure is task-oriented: 1. "Am I Ready?" for self-assessment. 2. "Find Your Fit" for exploring accelerators. 3. "Build Your Application" for practical guidance. 4. "What's Next?" for post-application steps. This flow is more intuitive and user-centric than the report's linear structure, allowing founders to engage with the content that's most relevant to their current stage. Interactive elements like checklists, filterable cards, and dynamic charts are used to make dense information digestible and engaging.
+        Visualization & Content Choices:
+        - Ecosystem Comparison: Goal: Compare. Method: Interactive HTML cards and a Chart.js Bar Chart to visually contrast equity stakes. Justification: Makes abstract comparisons tangible and easy to grasp.
+        - Accelerator Database: Goal: Organize/Compare. Method: Filterable HTML cards powered by JS. Justification: Allows users to quickly find relevant accelerators from a large list, a much better UX than a static table.
+        - Pitch Deck Guide: Goal: Inform/Organize. Method: Interactive HTML grid where clicking reveals detailed advice. Justification: Breaks down a complex task into manageable, "bite-sized" pieces.
+        - Traction Example: Goal: Inform. Method: Chart.js Line Chart. Justification: Provides a clear, visual benchmark for what "good traction" looks like.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #FDFBF8; /* Lighter warm neutral */
+            color: #4B4B4B; /* Darker warm gray */
+        }
+        .accent-color { color: #0C4A6E; }
+        .bg-accent { background-color: #0C4A6E; }
+        .border-accent { border-color: #0C4A6E; }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0C4A6E;
+            border-bottom-color: #0C4A6E;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1E293B;
+            margin-bottom: 1rem;
+        }
+        @media (min-width: 768px) {
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+        .section-subtitle {
+            font-size: 1rem;
+            color: #64748B;
+            max-width: 800px;
+            margin: 0 auto 3rem auto;
+        }
+        @media (min-width: 768px) {
+            .section-subtitle {
+                font-size: 1.2rem;
+            }
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+                max-height: 50vh;
+            }
+        }
+        /* Mobile menu improvements */
+        .mobile-menu {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .mobile-menu a {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background-color 0.2s;
+        }
+        .mobile-menu a:hover {
+            background-color: #f9fafb;
+        }
+        /* Mobile-friendly filter buttons */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            padding: 0 1rem;
+        }
+        @media (max-width: 640px) {
+            .filter-container {
+                gap: 0.25rem;
+            }
+        }
+        .filter-btn {
+            white-space: nowrap;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+        }
+        @media (max-width: 640px) {
+            .filter-btn {
+                font-size: 0.75rem;
+                padding: 0.375rem 0.75rem;
+            }
+        }
+        /* Mobile-friendly grid adjustments */
+        .mobile-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        @media (min-width: 768px) {
+            .mobile-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .mobile-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        /* Mobile-friendly pitch deck grid */
+        .pitch-deck-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        @media (min-width: 768px) {
+            .pitch-deck-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.5rem;
+            }
+        }
+        /* Mobile-friendly accelerator cards */
+        .accelerator-card {
+            min-height: auto;
+        }
+        @media (min-width: 768px) {
+            .accelerator-card {
+                min-height: 300px;
+            }
+        }
+        /* Mobile-friendly text sizes */
+        .mobile-text-lg {
+            font-size: 1.125rem;
+        }
+        @media (min-width: 768px) {
+            .mobile-text-lg {
+                font-size: 1.25rem;
+            }
+        }
+        .mobile-text-xl {
+            font-size: 1.25rem;
+        }
+        @media (min-width: 768px) {
+            .mobile-text-xl {
+                font-size: 1.5rem;
+            }
+        }
+        /* Mobile-friendly spacing */
+        .mobile-py {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        @media (min-width: 768px) {
+            .mobile-py {
+                padding-top: 4rem;
+                padding-bottom: 4rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .mobile-py {
+                padding-top: 6rem;
+                padding-bottom: 6rem;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- Header & Navigation -->
+<header id="header" class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+    <nav class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
+        <a href="#" class="text-xl md:text-2xl font-bold accent-color">创业加速器指南</a>
+        <div class="hidden md:flex space-x-6 lg:space-x-8">
+            <a href="#assessment" class="nav-link font-medium text-gray-600 pb-1">自我评估</a>
+            <a href="#finder" class="nav-link font-medium text-gray-600 pb-1">寻找匹配</a>
+            <a href="#application" class="nav-link font-medium text-gray-600 pb-1">构建申请</a>
+            <a href="#next-steps" class="nav-link font-medium text-gray-600 pb-1">后续步骤</a>
+        </div>
+        <button id="mobile-menu-button" class="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500">
+            <div class="w-6 h-0.5 bg-gray-700 mb-1.5 transition-transform duration-200"></div>
+            <div class="w-6 h-0.5 bg-gray-700 transition-opacity duration-200"></div>
+            <div class="w-6 h-0.5 bg-gray-700 mt-1.5 transition-transform duration-200"></div>
+        </button>
+    </nav>
+    <div id="mobile-menu" class="hidden md:hidden mobile-menu">
+        <a href="#assessment" class="block py-3 px-6 text-gray-700 hover:text-sky-800">自我评估</a>
+        <a href="#finder" class="block py-3 px-6 text-gray-700 hover:text-sky-800">寻找匹配</a>
+        <a href="#application" class="block py-3 px-6 text-gray-700 hover:text-sky-800">构建申请</a>
+        <a href="#next-steps" class="block py-3 px-6 text-gray-700 hover:text-sky-800">后续步骤</a>
+    </div>
+</header>
+
+<main>
+    <!-- Hero Section -->
+    <section class="text-center mobile-py px-4 md:px-6 bg-white">
+        <h1 class="text-3xl md:text-4xl lg:text-6xl font-extrabold text-gray-800 mb-4">开启你的加速之旅</h1>
+        <p class="mobile-text-lg max-w-3xl mx-auto text-gray-600">
+            一份面向创始人的交互式战略手册，将复杂的申请流程转化为清晰、可执行的步骤。
+        </p>
+    </section>
+
+    <!-- Section 1: Self-Assessment -->
+    <section id="assessment" class="mobile-py px-4 md:px-6 text-center">
+        <h2 class="section-title">第一步：我准备好了吗？</h2>
+        <p class="section-subtitle">
+            在投身申请的海洋之前，诚实地进行自我评估。本部分将帮助您判断您的创业公司所处的阶段，以及加速器是否是您正确的选择。
+        </p>
+
+        <div class="container mx-auto grid mobile-grid text-left">
+            <div class="card p-4 md:p-6">
+                <h3 class="text-lg md:text-xl font-bold mb-3 accent-color">👤 团队</h3>
+                <p class="text-sm md:text-base text-gray-600">加速器投资的是人。您是否拥有一个强大、背景互补、充满韧性且有共同工作经历的团队？这是评估中最关键的因素。</p>
+            </div>
+            <div class="card p-4 md:p-6">
+                <h3 class="text-lg md:text-xl font-bold mb-3 accent-color">📦 产品与问题</h3>
+                <p class="text-sm md:text-base text-gray-600">仅有想法远远不够。您是否已拥有最小可行产品 (MVP) 或功能原型，并且正在为一个真实、紧迫的问题提供解决方案？</p>
+            </div>
+            <div class="card p-4 md:p-6">
+                <h3 class="text-lg md:text-xl font-bold mb-3 accent-color">📈 市场牵引力</h3>
+                <p class="text-sm md:text-base text-gray-600">这是您走在正确道路上的证据。无论是收入、用户增长还是付费意向，牵引力的"增长速度"比绝对数值更重要。</p>
+            </div>
+            <div class="card p-4 md:p-6">
+                <h3 class="text-lg md:text-xl font-bold mb-3 accent-color">🧠 可教导性</h3>
+                <p class="text-sm md:text-base text-gray-600">加速器是一个学习过程。您和您的团队是否愿意接受反馈和指导？一个固执己见的团队很难在项目中成功。</p>
+            </div>
+        </div>
+
+        <div class="container mx-auto mt-12 md:mt-16 lg:mt-24">
+            <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">创业生态系统导航</h3>
+            <p class="section-subtitle">了解不同类型的支持体系至关重要。使用下面的图表来比较和判断哪条路径最适合您的公司当前的发展阶段。</p>
+            <div class="chart-container">
+                <canvas id="equityChart"></canvas>
+            </div>
+            <p class="text-xs md:text-sm text-gray-500 mt-4 px-4">图表展示了不同融资伙伴通常获取的股权比例。加速器提供资金和密集指导以换取较少股权，而风险投资则在后期投入巨额资本以换取更多股权。</p>
+        </div>
+    </section>
+
+    <!-- Section 2: Accelerator Finder -->
+    <section id="finder" class="mobile-py px-4 md:px-6 bg-white">
+        <div class="container mx-auto text-center">
+            <h2 class="section-title">第二步：寻找最佳匹配</h2>
+            <p class="section-subtitle">
+                并非所有加速器都一样。盲目地广撒网是最低效的策略。使用下面的筛选器，从全球顶级项目中找到与您的行业、阶段和目标最契合的"竞技场"。
+            </p>
+
+            <div class="filter-container mb-8 md:mb-10">
+                <button data-filter="all" class="filter-btn bg-accent text-white py-2 px-5 rounded-full">全部</button>
+                <button data-filter="Global" class="filter-btn bg-gray-200 text-gray-700 py-2 px-5 rounded-full">全球巨头</button>
+                <button data-filter="B2B" class="filter-btn bg-gray-200 text-gray-700 py-2 px-5 rounded-full">B2B/企业服务</button>
+                <button data-filter="Bio" class="filter-btn bg-gray-200 text-gray-700 py-2 px-5 rounded-full">生命科学</button>
+                <button data-filter="Impact" class="filter-btn bg-gray-200 text-gray-700 py-2 px-5 rounded-full">影响力投资</button>
+                <button data-filter="NoEquity" class="filter-btn bg-gray-200 text-gray-700 py-2 px-5 rounded-full">不占股</button>
+            </div>
+
+            <div id="accelerator-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 text-left">
+                <!-- Accelerator cards will be injected here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Build Your Application -->
+    <section id="application" class="mobile-py px-4 md:px-6">
+        <div class="container mx-auto text-center">
+            <h2 class="section-title">第三步：打造完美申请</h2>
+            <p class="section-subtitle">
+                申请材料是加速器了解您的唯一窗口。本节将把复杂的材料准备工作分解为三个核心部分：商业计划书 (Pitch Deck)、书面申请和产品演示。
+            </p>
+
+            <div class="text-left">
+                <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">叙事核心：12页商业计划书</h3>
+                <div id="deck-grid" class="grid pitch-deck-grid">
+                    <!-- Pitch Deck cards will be injected here -->
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mt-12 md:mt-16 lg:mt-24 text-left">
+                <div>
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">关键证据：展示市场牵引力</h3>
+                    <div class="card p-4">
+                        <div class="chart-container h-64 md:h-80">
+                            <canvas id="tractionChart"></canvas>
+                        </div>
+                    </div>
+                    <p class="text-center mt-4 text-sm md:text-base text-gray-600">用图表展示核心指标的月度增长。增长的"速度"和"势头"是说服投资者的最有力的证据。避免使用点击量等虚荣指标。</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">书面申请与演示视频</h3>
+                    <div class="space-y-4 md:space-y-6">
+                        <div class="card p-4 md:p-6">
+                            <h4 class="font-bold text-lg md:text-xl mb-2 accent-color">YC书面申请要点</h4>
+                            <ul class="list-disc list-inside space-y-2 text-sm md:text-base text-gray-600">
+                                <li><b>简洁、清晰、诚实：</b>删除所有行业黑话。</li>
+                                <li><b>50字符描述公司：</b>对清晰表达能力的终极考验。</li>
+                                <li><b>展示增长速度：</b>提供月度数据，而非累计数据。</li>
+                                <li><b>创始人与市场契合：</b>解释你为何是解决这个问题的最佳人选。</li>
+                            </ul>
+                        </div>
+                        <div class="card p-4 md:p-6">
+                            <h4 class="font-bold text-lg md:text-xl mb-2 accent-color">产品演示视频（1-2分钟）</h4>
+                            <ul class="list-disc list-inside space-y-2 text-sm md:text-base text-gray-600">
+                                <li><b>讲述故事：</b>从问题场景到解决方案，再到成功结果。</li>
+                                <li><b>创始人亲自讲解：</b>增加真实感和热情，保持自然语调。</li>
+                                <li><b>技术执行：</b>录音清晰，画面高清，无需花哨特效。</li>
+                                <li><b>展示，而非告知：</b>让产品自己说话。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Next Steps -->
+    <section id="next-steps" class="mobile-py px-4 md:px-6 bg-white">
+        <div class="container mx-auto text-center">
+            <h2 class="section-title">第四步：申请之后</h2>
+            <p class="section-subtitle">
+                提交申请只是开始。如果足够幸运，您将进入面试环节。一旦被录取，真正的挑战——在短短三个月内实现指数级增长——才刚刚开始。
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto text-left">
+                <div class="card p-6 md:p-8">
+                    <h3 class="font-bold text-xl md:text-2xl mb-4 accent-color">驾驭面试（10-15分钟）</h3>
+                    <p class="text-sm md:text-base text-gray-600">面试是快节奏的压力测试，旨在检验您的思维清晰度和团队协作能力。充分准备，重温申请，预判尖锐问题，并练习用最简洁的语言回答。</p>
+                </div>
+                <div class="card p-6 md:p-8">
+                    <h3 class="font-bold text-xl md:text-2xl mb-4 accent-color">最大化利用项目期</h3>
+                    <p class="text-sm md:text-base text-gray-600">一旦被录取，就应全力以赴。设定明确目标，主动利用导师和网络资源，聚焦于提升核心指标，并从项目中期就开始准备路演日。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="bg-gray-800 text-white text-center py-6 md:py-8 px-4 md:px-6">
+    <p class="text-sm md:text-base">基于《创业加速器申请指南》报告创建的交互式应用。</p>
+    <p class="text-xs md:text-sm text-gray-400 mt-2">祝您申请顺利，前程似锦。</p>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Mobile Menu Toggle with animation
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const hamburgerLines = mobileMenuButton.querySelectorAll('div');
+
+        mobileMenuButton.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.contains('hidden');
+
+            if (isOpen) {
+                // Close menu
+                mobileMenu.classList.add('hidden');
+                hamburgerLines[0].style.transform = 'none';
+                hamburgerLines[1].style.opacity = '1';
+                hamburgerLines[2].style.transform = 'none';
+            } else {
+                // Open menu
+                mobileMenu.classList.remove('hidden');
+                hamburgerLines[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                hamburgerLines[1].style.opacity = '0';
+                hamburgerLines[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                hamburgerLines[0].style.transform = 'none';
+                hamburgerLines[1].style.opacity = '1';
+                hamburgerLines[2].style.transform = 'none';
+            });
+        });
+
+        // Data
+        const acceleratorData = [
+            { name: 'Y Combinator', category: 'Global', focus: '全球，技术驱动', investment: '$125k for 7% + $375k SAFE', duration: '3个月', alumni: 'Airbnb, Stripe', insight: '极度看重创始人特质、增长速度和沟通清晰度。' },
+            { name: 'Techstars', category: 'Global', focus: '全球网络，行业/城市特定项目', investment: '$20k for 5% + $200k optional SAFE', duration: '3个月', alumni: 'SendGrid, DigitalOcean', insight: '必须精准选择最匹配的特定项目，研究其导师网络。' },
+            { name: 'Alchemist Accelerator', category: 'B2B', focus: 'B2B/企业服务', investment: '~$25k net for ~5%', duration: '6个月', alumni: 'LaunchDarkly, Rigetti', insight: '需展示对企业销售的深刻理解和清晰策略。' },
+            { name: '500 Global', category: 'Global', focus: '全球早期，注重多元化', investment: '$112.5k for 6% (incl. fee)', duration: '4个月', alumni: '-', insight: '寻找具有全球化视野和跨文化市场能力的创始人。' },
+            { name: 'MassChallenge', category: 'NoEquity', focus: '全球，高影响力，行业不限', investment: '不占股，提供奖金', duration: '不定', alumni: '-', insight: '非营利模式，适合希望保留全部股权的早期高潜力公司。' },
+            { name: 'Spring Activator', category: 'Impact', focus: '影响力投资 (社会/环境)', investment: '视项目而定', duration: '不定', alumni: 'Moment Energy, BinBreeze', insight: '必须清晰阐述公司的正面社会或环境影响。' },
+            { name: 'adMare BioInnovations', category: 'Bio', focus: '加拿大生命科学/生物技术', investment: '提供资金、实验室和支持', duration: '不定', alumni: '9Bio, SeraGene', insight: '高度专业化，要求科学严谨性和商业潜力。' }
+        ];
+
+        const pitchDeckData = [
+            { title: '封面', tip: '清晰展示公司名称、Logo和一句高度概括的标语（Tagline）。' },
+            { title: '愿景/使命', tip: '阐述公司存在的宏大理由，激发情感共鸣。' },
+            { title: '问题', tip: '用数据或故事清晰描述目标客户的痛苦。' },
+            { title: '解决方案', tip: '解释你的产品如何为客户创造价值。' },
+            { title: '产品/演示', tip: '"展示，而非告知"。提供一个产品演示视频的链接。' },
+            { title: '时机', tip: '解释为什么现在是最佳时机，创造紧迫感。' },
+            { title: '市场规模', tip: '展示TAM超过$10亿美元，使用自下而上的估算方法。' },
+            { title: '竞争格局', tip: '诚实列出对手，但重点突出你的"不公平优势"。' },
+            { title: '商业模式', tip: '清晰说明你如何赚钱，保持专注。' },
+            { title: '市场牵引力', tip: '用图表展示1-4个核心指标的增长速度和势头。' },
+            { title: '团队', tip: '介绍核心成员，突出相关经验和互补技能。' },
+            { title: '融资需求', tip: '明确说明融资金额及用于实现的关键里程碑。' }
+        ];
+
+        // Render Accelerator Cards
+        const grid = document.getElementById('accelerator-grid');
+        function renderAccelerators(filter = 'all') {
+            grid.innerHTML = '';
+            const filteredData = filter === 'all' ? acceleratorData : acceleratorData.filter(a => a.category === filter);
+            filteredData.forEach(accel => {
+                const card = document.createElement('div');
+                card.className = 'card p-4 md:p-6 flex flex-col accelerator-card';
+                card.innerHTML = `
+                        <h3 class="text-lg md:text-xl font-bold accent-color mb-2">${accel.name}</h3>
+                        <p class="text-xs md:text-sm font-semibold text-gray-500 mb-3">${accel.focus}</p>
+                        <div class="space-y-2 text-gray-700 flex-grow text-sm md:text-base">
+                            <p><strong>投资条款:</strong> ${accel.investment}</p>
+                            <p><strong>项目时长:</strong> ${accel.duration}</p>
+                            <p><strong>知名校友:</strong> ${accel.alumni}</p>
+                        </div>
+                        <p class="mt-4 pt-4 border-t border-gray-100 text-xs md:text-sm bg-sky-50 p-3 rounded-lg text-sky-800"><strong>关键洞察:</strong> ${accel.insight}</p>
+                    `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('bg-accent', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-700');
+                });
+                button.classList.add('bg-accent', 'text-white');
+                button.classList.remove('bg-gray-200', 'text-gray-700');
+                renderAccelerators(button.dataset.filter);
+            });
+        });
+
+        // Render Pitch Deck Cards
+        const deckGrid = document.getElementById('deck-grid');
+        pitchDeckData.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'card p-3 md:p-4 text-center cursor-pointer';
+            card.innerHTML = `
+                    <div class="h-full flex flex-col justify-center items-center">
+                        <p class="text-gray-400 text-xs md:text-sm font-bold">${index + 1}</p>
+                        <h4 class="text-sm md:text-lg font-semibold accent-color">${item.title}</h4>
+                        <p class="text-xs md:text-sm text-gray-500 mt-2 hidden">${item.tip}</p>
+                    </div>
+                `;
+            card.addEventListener('click', () => {
+                const tip = card.querySelector('p:last-child');
+                const allTips = deckGrid.querySelectorAll('.card p:last-child');
+                const isVisible = !tip.classList.contains('hidden');
+
+                allTips.forEach(t => t.classList.add('hidden'));
+
+                if (!isVisible) {
+                    tip.classList.remove('hidden');
+                }
+            });
+            deckGrid.appendChild(card);
+        });
+
+        // Chart.js Implementations
+        // 1. Equity Chart
+        const equityCtx = document.getElementById('equityChart').getContext('2d');
+        new Chart(equityCtx, {
+            type: 'bar',
+            data: {
+                labels: ['孵化器', '加速器', '风险投资 (VC)', '创业工作室'],
+                datasets: [{
+                    label: '典型股权占比 (%)',
+                    data: [2.5, 7.5, 22.5, 35], // Averages for visualization
+                    backgroundColor: ['#A5B4FC', '#60A5FA', '#38BDF8', '#0EA5E9'],
+                    borderColor: ['#818CF8', '#3B82F6', '#0284C7', '#0369A1'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: '不同创业支持模式的股权交换对比',
+                        font: { size: window.innerWidth < 768 ? 14 : 16 }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    let value = context.parsed.y;
+                                    if(context.label === '孵化器') label += '0-5%';
+                                    if(context.label === '加速器') label += '5-10%';
+                                    if(context.label === '风险投资 (VC)') label += '15-30%';
+                                    if(context.label === '创业工作室') label += '20-50%';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: '股权 (%)' }
+                    }
+                }
+            }
+        });
+
+        // 2. Traction Chart
+        const tractionCtx = document.getElementById('tractionChart').getContext('2d');
+        new Chart(tractionCtx, {
+            type: 'line',
+            data: {
+                labels: ['第一月', '第二月', '第三月', '第四月', '第五月', '第六月'],
+                datasets: [{
+                    label: '月活跃用户 (MAU)',
+                    data: [50, 150, 400, 950, 2100, 4500],
+                    fill: true,
+                    backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                    borderColor: '#0284C7',
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: '市场牵引力增长示例 (MoM)',
+                        font: { size: window.innerWidth < 768 ? 14 : 16 }
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: '用户数' }
+                    }
+                }
+            }
+        });
+
+        // Initial render
+        renderAccelerators();
+    });
+</script>
+</body>
+</html>
