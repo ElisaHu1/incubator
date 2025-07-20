@@ -126,6 +126,32 @@
         .fancy-glow:hover {
             box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
         }
+        .section-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        .emoji-icon {
+            transition: all 0.3s ease;
+        }
+        .emoji-icon:hover {
+            transform: scale(1.2) rotate(5deg);
+        }
+        .text-hover {
+            transition: all 0.3s ease;
+        }
+        .text-hover:hover {
+            transform: scale(1.02);
+        }
+        .button-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .button-hover:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px -10px rgba(59, 130, 246, 0.4);
+        }
         .story-card.active {
             border-color: #3b82f6;
             background-color: #eff6ff;
@@ -169,10 +195,10 @@
             <p class="mt-6 text-lg md:text-xl text-white max-w-3xl mx-auto">"Heartbeat" is a thoughtful and compassionate mobile application designed for caring individuals who want to stay connected with their loved ones. It provides a gentle, consistent safety net while fostering deeper relationships and peace of mind through personalized support, moving beyond simple check-ins to nurture meaningful connections.</p>
         </section>
 
-        <section id="problem" class="py-16 bg-white rounded-xl shadow-lg my-16">
+        <section id="problem" class="section-card py-16 bg-white rounded-xl shadow-lg my-16">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-stone-900">Supporting Those Who Care</h2>
-                <p class="mt-4 text-lg text-stone-600 max-w-3xl mx-auto">In a world where many live independently, caring individuals face unique challenges in staying connected with their loved ones. We aim to bridge the gap between caring hearts and those they love.</p>
+                <p class="mt-4 text-lg text-blue-700 max-w-3xl mx-auto hover:text-blue-800 transition-colors duration-300">In a world where many live independently, caring individuals face unique challenges in staying connected with their loved ones. We aim to bridge the gap between caring hearts and those they love.</p>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-8 items-center">
                 <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -203,10 +229,10 @@
             </div>
         </section>
 
-        <section id="audience" class="py-16 compassion-gradient rounded-xl my-16">
+        <section id="audience" class="section-card py-16 compassion-gradient rounded-xl my-16">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-stone-900">Who We Support</h2>
-                <p class="mt-4 text-lg text-stone-600 max-w-3xl mx-auto">Heartbeat is designed for caring individuals who want to stay connected with their loved ones while respecting independence and fostering meaningful relationships.</p>
+                <p class="mt-4 text-lg text-indigo-700 max-w-3xl mx-auto hover:text-indigo-800 transition-colors duration-300">Heartbeat is designed for caring individuals who want to stay connected with their loved ones while respecting independence and fostering meaningful relationships.</p>
             </div>
             <div class="flex flex-wrap justify-center gap-4 mb-8">
                 <button data-target="audience-1" class="target-card p-4 rounded-lg border-2 border-transparent cursor-pointer bg-white shadow-sm fancy-glow">
@@ -226,30 +252,30 @@
             </div>
         </section>
 
-        <section id="privacy" class="py-16 bg-white rounded-xl shadow-lg my-16">
+        <section id="privacy" class="section-card py-16 bg-white rounded-xl shadow-lg my-16">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-stone-900">Built on Trust and Care</h2>
-                <p class="mt-4 text-lg text-stone-600 max-w-3xl mx-auto">We believe that caring connections and privacy must go hand-in-hand. Heartbeat is built on principles of trust, respect, and genuine care for relationships.</p>
+                <p class="mt-4 text-lg text-teal-700 max-w-3xl mx-auto hover:text-teal-800 transition-colors duration-300">We believe that caring connections and privacy must go hand-in-hand. Heartbeat is built on principles of trust, respect, and genuine care for relationships.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-                <div class="p-4">
-                    <div class="text-4xl">🤝</div>
-                    <h3 class="font-semibold text-lg mt-4">Respectful Connections</h3>
+                <div class="p-4 hover:bg-blue-50 rounded-lg transition-colors duration-300">
+                    <div class="text-4xl emoji-icon">🤝</div>
+                    <h3 class="font-semibold text-lg mt-4 text-hover">Respectful Connections</h3>
                     <p class="mt-2 text-stone-600">We facilitate caring connections while respecting everyone's independence and personal boundaries.</p>
                 </div>
-                <div class="p-4">
-                    <div class="text-4xl">💝</div>
-                    <h3 class="font-semibold text-lg mt-4">Caring by Choice</h3>
+                <div class="p-4 hover:bg-blue-50 rounded-lg transition-colors duration-300">
+                    <div class="text-4xl emoji-icon">💝</div>
+                    <h3 class="font-semibold text-lg mt-4 text-hover">Caring by Choice</h3>
                     <p class="mt-2 text-stone-600">All features are optional and designed to enhance relationships, not replace them.</p>
                 </div>
-                <div class="p-4">
-                    <div class="text-4xl">🔒</div>
-                    <h3 class="font-semibold text-lg mt-4">Secure & Private</h3>
+                <div class="p-4 hover:bg-blue-50 rounded-lg transition-colors duration-300">
+                    <div class="text-4xl emoji-icon">🔒</div>
+                    <h3 class="font-semibold text-lg mt-4 text-hover">Secure & Private</h3>
                     <p class="mt-2 text-stone-600">All information is protected with the highest security standards, keeping your caring connections safe.</p>
                 </div>
-                <div class="p-4">
-                    <div class="text-4xl">❤️</div>
-                    <h3 class="font-semibold text-lg mt-4">Heart-Centered Design</h3>
+                <div class="p-4 hover:bg-blue-50 rounded-lg transition-colors duration-300">
+                    <div class="text-4xl emoji-icon">❤️</div>
+                    <h3 class="font-semibold text-lg mt-4 text-hover">Heart-Centered Design</h3>
                     <p class="mt-2 text-stone-600">Every feature is designed with genuine care for relationships and human connection in mind.</p>
                 </div>
             </div>
@@ -265,7 +291,7 @@
             <p class="mt-6 text-lg md:text-xl text-white max-w-3xl mx-auto">A compassionate approach to connecting caring individuals with their loved ones through thoughtful design and genuine care.</p>
         </section>
 
-        <section class="py-16 bg-white rounded-xl shadow-lg my-16">
+        <section class="section-card py-16 bg-white rounded-xl shadow-lg my-16">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-stone-900">I. Reaching Caring Hearts</h2>
             </div>
@@ -317,14 +343,14 @@
             </div>
         </section>
 
-        <section class="py-16 bg-white rounded-xl shadow-lg my-16">
+        <section class="section-card py-16 bg-white rounded-xl shadow-lg my-16">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-stone-900">II. Nurturing Caring Connections</h2>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="space-y-6">
-                    <div class="bg-pink-50 p-6 rounded-lg">
+                    <div class="card bg-pink-50 p-6 rounded-lg fancy-glow">
                         <h3 class="text-xl font-bold text-pink-800 mb-3">Warm Welcome</h3>
                         <ul class="space-y-2 text-sm text-stone-700">
                             <li>• Gentle, caring onboarding experience</li>
@@ -334,7 +360,7 @@
                         </ul>
                     </div>
 
-                    <div class="bg-amber-50 p-6 rounded-lg">
+                    <div class="card bg-amber-50 p-6 rounded-lg fancy-glow">
                         <h3 class="text-xl font-bold text-amber-800 mb-3">Meaningful Milestones</h3>
                         <ul class="space-y-2 text-sm text-stone-700">
                             <li>• Celebrate caring connections made</li>
@@ -346,7 +372,7 @@
                 </div>
 
                 <div class="space-y-6">
-                    <div class="bg-teal-50 p-6 rounded-lg">
+                    <div class="card bg-teal-50 p-6 rounded-lg fancy-glow">
                         <h3 class="text-xl font-bold text-teal-800 mb-3">Caring Communication</h3>
                         <ul class="space-y-2 text-sm text-stone-700">
                             <li>• Gentle, thoughtful notifications</li>
@@ -356,7 +382,7 @@
                         </ul>
                     </div>
 
-                    <div class="bg-indigo-50 p-6 rounded-lg">
+                    <div class="card bg-indigo-50 p-6 rounded-lg fancy-glow">
                         <h3 class="text-xl font-bold text-indigo-800 mb-3">Family Circles</h3>
                         <ul class="space-y-2 text-sm text-stone-700">
                             <li>• Create private family networks</li>
@@ -384,23 +410,23 @@
                 <h3 class="text-xl font-semibold text-center text-stone-800 mb-8">The Caring Check-In Flow</h3>
                 <div id="flow-diagram" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 items-start text-center">
                     <div id="flow-1" class="flow-step flex flex-col items-center p-4 rounded-lg border-2 border-stone-200 bg-stone-50">
-                        <div class="text-3xl">💝</div>
+                        <div class="text-3xl emoji-icon">💝</div>
                         <p class="font-semibold mt-2 text-sm">Gentle Reminder</p>
                     </div>
                     <div id="flow-2" class="flow-step flex flex-col items-center p-4 rounded-lg border-2 border-stone-200 bg-stone-50">
-                        <div class="text-3xl">✅</div>
+                        <div class="text-3xl emoji-icon">✅</div>
                         <p class="font-semibold mt-2 text-sm">Loved One Responds</p>
                     </div>
                     <div id="flow-3" class="flow-step flex flex-col items-center p-4 rounded-lg border-2 border-stone-200 bg-stone-50">
-                        <div class="text-3xl">🤔</div>
+                        <div class="text-3xl emoji-icon">🤔</div>
                         <p class="font-semibold mt-2 text-sm">No Response</p>
                     </div>
                     <div id="flow-4" class="flow-step flex flex-col items-center p-4 rounded-lg border-2 border-stone-200 bg-stone-50">
-                        <div class="text-3xl">📞</div>
+                        <div class="text-3xl emoji-icon">📞</div>
                         <p class="font-semibold mt-2 text-sm">Family Alert</p>
                     </div>
                     <div id="flow-5" class="flow-step flex flex-col items-center p-4 rounded-lg border-2 border-stone-200 bg-stone-50">
-                        <div class="text-3xl">📍</div>
+                        <div class="text-3xl emoji-icon">📍</div>
                         <p class="font-semibold mt-2 text-sm">Location Sharing</p>
                     </div>
                 </div>
@@ -462,27 +488,27 @@
         <section class="py-16">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-stone-900">How Heartbeat Cares in Real Life</h2>
-                <p class="mt-4 text-lg text-stone-600 max-w-3xl mx-auto">Select a story to see how Heartbeat supports different caring relationships and lifestyles.</p>
+                <p class="mt-4 text-lg text-purple-700 max-w-3xl mx-auto hover:text-purple-800 transition-colors duration-300">Select a story to see how Heartbeat supports different caring relationships and lifestyles.</p>
             </div>
 
             <div class="flex flex-wrap justify-center gap-4 mb-12">
                 <button data-story="story-1" class="story-card p-4 rounded-lg border-2 border-transparent cursor-pointer bg-white shadow-sm fancy-glow">
                     <div class="text-center">
-                        <div class="text-3xl mb-2">🌍</div>
+                        <div class="text-3xl mb-2 emoji-icon">🌍</div>
                         <h4 class="font-semibold">The Distant Loved One</h4>
                         <p class="text-sm text-gray-600 mt-1">Alex, 28, living abroad</p>
                     </div>
                 </button>
                 <button data-story="story-2" class="story-card p-4 rounded-lg border-2 border-transparent cursor-pointer bg-white shadow-sm fancy-glow">
                     <div class="text-center">
-                        <div class="text-3xl mb-2">👵</div>
+                        <div class="text-3xl mb-2 emoji-icon">👵</div>
                         <h4 class="font-semibold">The Independent Elder</h4>
                         <p class="text-sm text-gray-600 mt-1">Eleanor, 72, living independently</p>
                     </div>
                 </button>
                 <button data-story="story-3" class="story-card p-4 rounded-lg border-2 border-transparent cursor-pointer bg-white shadow-sm fancy-glow">
                     <div class="text-center">
-                        <div class="text-3xl mb-2">🧘</div>
+                        <div class="text-3xl mb-2 emoji-icon">🧘</div>
                         <h4 class="font-semibold">The Well-being Seeker</h4>
                         <p class="text-sm text-gray-600 mt-1">Sam, 35, focused on holistic health</p>
                     </div>
